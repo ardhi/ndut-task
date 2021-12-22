@@ -1,0 +1,30 @@
+{
+  "name": "ndut-task",
+  "version": "0.0.1",
+  "description": "Job Scheduler for Ndut Framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ardhi/ndut-task.git"
+  },
+  "keywords": [
+    "ndut",
+    "task",
+    "job",
+    "schedule",
+    "worker",
+    "fastify"
+  ],
+  "author": "Ardhi Lukianto <ardhi@lukianto.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ardhi/ndut-task/issues"
+  },
+  "homepage": "https://github.com/ardhi/ndut-task#readme",
+  "dependencies": {
+    "node-schedule": "^2.1.0"
+  }
+}

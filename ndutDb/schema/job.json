@@ -1,0 +1,32 @@
+{
+  "properties": {
+    "name": {
+      "type": "String",
+      "length": 50,
+      "required": true,
+      "index": true
+    },
+    "handler": {
+      "type": "String",
+      "length": 50,
+      "required": true,
+      "index": true
+    },
+    "params": {
+      "type": "json"
+    },
+    "result": {
+      "type": "json"
+    },
+    "download": {
+      "type": "String"
+    }
+  },
+  "feature": {
+    "createdAt": true,
+    "updatedAt": true,
+    "deletedAt": true,
+    "siteId": true,
+    "status": true
+  }
+}
