@@ -6,6 +6,7 @@ module.exports = async function () {
   const name = 'ndut-task'
   const ndutConfig = _.find(config.nduts, { name }) || {}
   ndutConfig.downloadDir = `${config.dir.data}/ndutTask/download`
+  ndutConfig.lockDir = `${config.dir.data}/ndutTask/lock`
 
   return { name, plugin: fp(plugin), options: ndutConfig }
 }
