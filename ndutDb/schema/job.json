@@ -1,4 +1,5 @@
 {
+  "dataSource": "memory",
   "properties": {
     "name": {
       "type": "String",
