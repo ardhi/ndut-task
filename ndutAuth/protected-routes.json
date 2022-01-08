@@ -1,0 +1,4 @@
+{
+  "/job": ["GET", "POST"],
+  "/job/:id": ["GET", "PUT", "DELETE"]
+}

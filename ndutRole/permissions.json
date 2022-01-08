@@ -1,0 +1,18 @@
+[
+  {
+    "type": "rest",
+    "subject": "/job",
+    "action": ["read", "create"],
+    "conditions": {
+      "access": { "$in": ["admin"] }
+    }
+  },
+  {
+    "type": "rest",
+    "subject": "/job/:id",
+    "action": ["read", "update", "remove"],
+    "conditions": {
+      "access": { "$in": ["admin"] }
+    }
+  }
+]
