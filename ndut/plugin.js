@@ -1,26 +1,26 @@
 const path = require('path')
 const schedule = require('node-schedule')
 
-module.exports = async function (scope, options) {
-  const { _, fastGlob, lockfile, fs } = scope.ndut.helper
-  const { config } = scope
+const plugin = async function (scope, options) {
+  const { _, fastGlob, lockfile, fs, getConfig, getNdutConfig } = scope.ndut.helper
+  const config = await getConfig()
+  // const options = await getNdutConfig('ndut-task')
   const mods = {}
   const job = {}
+
+  options.downloadDir = `${config.dir.data}/download`
+  options.lockDir = `${config.dir.data}/lock`
 
   await fs.ensureDir(options.downloadDir)
   await fs.ensureDir(options.lockDir)
 
-  for (const n of config.nduts) {
+  for (let n of config.nduts) {
+    n = await getNdutConfig(n)
     const files = await fastGlob(`${n.dir}/ndutTask/job/*.js`)
     for (const f of files) {
       const name = _.camelCase(`${n.alias} ${path.basename(f, '.js')}`)
       mods[name] = f
     }
-  }
-  const files = await fastGlob(`${config.dir.base}/ndutTask/job/*.js`)
-  for (const f of files) {
-    const name = _.camelCase(path.basename(f, '.js'))
-    mods[name] = f
   }
 
   for (const name of _.keys(mods)) {
@@ -68,8 +68,13 @@ module.exports = async function (scope, options) {
     item.unlockFn = item.multiProcess ? null : await lockfile.lock(mods[name], { lockfilePath })
     if (item.time) item.schedule = schedule.scheduleJob(item.time, runner)
     job[name] = item
-    scope.log.debug(`+ Job '${name}'`)
+    scope.log.debug(`* Job '${name}'`)
   }
 
   scope.ndutTask.job = job
+}
+
+module.exports = async function () {
+  const { fp } = this.ndut.helper
+  return fp(plugin)
 }
