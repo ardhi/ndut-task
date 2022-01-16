@@ -4,7 +4,6 @@ const schedule = require('node-schedule')
 const plugin = async function (scope, options) {
   const { _, fastGlob, lockfile, fs, getConfig, getNdutConfig } = scope.ndut.helper
   const config = await getConfig()
-  // const options = await getNdutConfig('ndut-task')
   const mods = {}
   const job = {}
 
