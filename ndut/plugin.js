@@ -7,12 +7,7 @@ const plugin = async function (scope, options) {
   const mods = {}
   const job = {}
 
-  options.downloadDir = `${config.dir.data}/download`
-  options.lockDir = `${config.dir.data}/lock`
-
   await fs.ensureDir(options.downloadDir)
-  await fs.ensureDir(options.lockDir)
-
   for (let n of config.nduts) {
     n = await getNdutConfig(n)
     const files = await fastGlob(`${n.dir}/ndutTask/job/*.js`)
@@ -63,7 +58,7 @@ const plugin = async function (scope, options) {
           item.started = 0
         })
     }
-    const lockfilePath = `${options.lockDir}/${name}.lock`
+    const lockfilePath = `${config.dir.lock}/${name}.lock`
     item.unlockFn = item.multiProcess ? null : await lockfile.lock(mods[name], { lockfilePath })
     if (item.time) item.schedule = schedule.scheduleJob(item.time, runner)
     job[name] = item

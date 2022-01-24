@@ -3,7 +3,6 @@ module.exports = async function () {
   const config = await getConfig()
   return {
     name: 'ndut-task',
-    downloadDir: `${config.dir.data}/download`,
-    lockDir: `${config.dir.data}/lock`
+    downloadDir: `${config.dir.data}/download`
   }
 }
