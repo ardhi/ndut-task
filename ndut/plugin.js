@@ -3,13 +3,13 @@ const schedule = require('node-schedule')
 
 const plugin = async function (scope, options) {
   const { _, fastGlob, lockfile, fs, getConfig, getNdutConfig } = scope.ndut.helper
-  const config = await getConfig()
+  const config = getConfig()
   const mods = {}
   const job = {}
 
   await fs.ensureDir(options.downloadDir)
   for (let n of config.nduts) {
-    n = await getNdutConfig(n)
+    n = getNdutConfig(n)
     const files = await fastGlob(`${n.dir}/ndutTask/job/*.js`)
     for (const f of files) {
       const name = _.camelCase(`${n.alias} ${path.basename(f, '.js')}`)

@@ -1,0 +1,12 @@
+[
+  {
+    "path": "/job",
+    "method": ["read", "create"],
+    "access": "admin"
+  },
+  {
+    "path": "/job/:id",
+    "method": ["read", "update", "remove"],
+    "access": "admin"
+  }
+]
