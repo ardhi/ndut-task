@@ -8,11 +8,11 @@ const plugin = async function (scope, options) {
   const job = {}
 
   await fs.ensureDir(options.downloadDir)
-  for (let n of config.nduts) {
-    n = getNdutConfig(n)
-    const files = await fastGlob(`${n.dir}/ndutTask/job/*.js`)
+  for (const n of config.nduts) {
+    const cfg = getNdutConfig(n)
+    const files = await fastGlob(`${cfg.dir}/ndutTask/job/*.js`)
     for (const f of files) {
-      const name = _.camelCase(`${n.alias} ${path.basename(f, '.js')}`)
+      const name = _.camelCase(`${cfg.alias} ${path.basename(f, '.js')}`)
       mods[name] = f
     }
   }
