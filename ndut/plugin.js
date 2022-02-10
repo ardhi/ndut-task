@@ -4,8 +4,10 @@ const schedule = require('node-schedule')
 const plugin = async function (scope, options) {
   const { _, fastGlob, lockfile, fs, getConfig, getNdutConfig } = scope.ndut.helper
   const config = getConfig()
-  const mods = {}
-  const job = {}
+  scope.ndutTask.mods = scope.ndutTask.mods || {}
+  scope.ndutTask.job = scope.ndutTask.job || {}
+  const mods = scope.ndutTask.mods
+  const job = scope.ndutTask.job
 
   await fs.ensureDir(options.downloadDir)
   for (const n of config.nduts) {
@@ -18,11 +20,13 @@ const plugin = async function (scope, options) {
   }
 
   for (const name of _.keys(mods)) {
-    let item = require(mods[name])
-    if (_.isFunction(item)) item = await item(scope)
+    let item = mods[name]
+    if (_.isString(item)) {
+      item = require(item)
+      if (_.isFunction(item)) item = await item(scope)
+    }
     item.name = name
     item.description = item.description || _.startCase(name)
-    item.multiProcess = !!item.multiProcess
     item.started = 0
     item.timeout = item.timeout || 0
     item.handler = item.handler.bind(scope)
@@ -47,10 +51,12 @@ const plugin = async function (scope, options) {
       scope.log.debug(`[${options.alias}:${item.name}] started`)
       Promise.resolve()
         .then(() => {
-          return item.handler()
+          return item.handler(item.params)
         })
         .then(result => {
-          scope.log.debug(`[${options.alias}:${item.name}] completed in ${Date.now() - item.started} ms`)
+          let text = `[${options.alias}:${item.name}] completed in ${Date.now() - item.started} ms`
+          if (result) text += `, message: ${result}`
+          scope.log.debug(text)
           item.started = 0
         })
         .catch(err => {
@@ -58,14 +64,16 @@ const plugin = async function (scope, options) {
           item.started = 0
         })
     }
-    const lockfilePath = `${config.dir.lock}/${name}.lock`
-    item.unlockFn = item.multiProcess ? null : await lockfile.lock(mods[name], { lockfilePath })
+    /*
+    if (_.isString(mods[name])) {
+      const lockfilePath = `${config.dir.lock}/${name}.lock`
+      item.unlockFn = await lockfile.lock(mods[name], { lockfilePath })
+    }
+    */
     if (item.time) item.schedule = schedule.scheduleJob(item.time, runner)
     job[name] = item
     scope.log.debug(`* Job '${name}'`)
   }
-
-  scope.ndutTask.job = job
 }
 
 module.exports = async function () {
