@@ -60,12 +60,12 @@ const plugin = async function (scope, options) {
           .then(result => {
             let text = `[${options.alias}:${i.name}] completed in ${Date.now() - i.started} ms`
             if (result) text += `, message: ${result}`
-            scope.log.debug(text)
             i.started = 0
+            scope.log.debug(text)
           })
           .catch(err => {
+            i.started = 0
             scope.log.error(`[${options.alias}:${i.name}] ${err.message}`)
-            item.started = 0
           })
       }
       /*
