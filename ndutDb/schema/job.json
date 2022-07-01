@@ -23,11 +23,5 @@
       "type": "String"
     }
   },
-  "feature": {
-    "createdAt": true,
-    "updatedAt": true,
-    "deletedAt": true,
-    "ndutSiteSiteId": true,
-    "status": true
-  }
+  "feature": ["createdAt", "updatedAt", "deletedAt", "ndutSiteSiteId", "status"]
 }

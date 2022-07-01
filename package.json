@@ -1,6 +1,6 @@
 {
   "name": "ndut-task",
-  "version": "0.6.8",
+  "version": "0.7.0",
   "description": "Job Scheduler for Ndut Framework",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
