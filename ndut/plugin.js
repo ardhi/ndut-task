@@ -77,7 +77,10 @@ const plugin = async function (scope, options) {
       if (i.time) i.schedule = schedule.scheduleJob(i.time, runner)
       job[i.name] = i
       scope.log.debug(`* Job '${i.name}'`)
-      if (i.runEarly) i.handler(i.params)
+      if (i.runEarly) {
+        i.handler(i.params)
+        scope.log.debug(`[${options.alias}:${i.name}] running early`)
+      }
     }
   }
 }
